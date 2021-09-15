@@ -3,6 +3,10 @@ pipeline {
   tools {
     maven 'M2_HOME'
   }
+  environment {
+    registry = "avis2good/blessed"
+    registryCredential = 'docker_hub_login'
+}
   
     stages { 
       stage ('Build') {
@@ -21,9 +25,24 @@ pipeline {
       stage ('Build Image') {
         steps {
           script {
-                    docker.build("avis2good/blessed")
+                    docker.build registry + ":$BUILD_NUMBER"
               }
            }
         }
+      stage('Deploy Image') {
+        steps {    
+          script {
+      docker.withRegistry( '', registryCredential ) 
+            {
+        dockerImage.push()
+      }
+    }
   }
+}
+       stage('Remove Unused docker image') {
+         steps {
+        sh "docker rmi $registry:$BUILD_NUMBER"
+      }
+    }
+}
 } 
