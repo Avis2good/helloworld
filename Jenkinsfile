@@ -17,12 +17,25 @@ pipeline {
           sh 'mvn test'
         }
      }
-      stage ('Staging') {
+      stage ('Build Image') {
         steps {
-          echo "build step"
-          sleep 10
+          script {
+                    app = docker.build("avis2good/blessed")
+                    app.inside {
+                        sh 'echo $(curl localhost:8080)'
+              }
+           }
         }
-     }
-      
+      } 
+       stage ('Push docker image') {
+        steps {
+          script {
+                    docker.withRegistry('https://registry.hub.docker.com', 'docker_hub_login') {
+                        app.push("${env.BUILD_NUMBER}")
+                        app.push("latest")
+                    }
+                }
+        }
+      } 
   }
 }
