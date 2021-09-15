@@ -12,6 +12,7 @@ pipeline {
           sh 'mvn package'
         }
      }
+   }
       stage ('test') {
         steps {
           sh 'mvn test'
@@ -24,14 +25,5 @@ pipeline {
               }
            }
         }
-       stage ('Push docker image') {
-        steps {
-          script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'docker_hub_login') {
-                        push("${env.BUILD_NUMBER}")
-                        push("latest")
-                    }
-             }
-        }
-      } 
-  }
+       
+} 
