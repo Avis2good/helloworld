@@ -24,7 +24,6 @@ pipeline {
               }
            }
         }
-      } 
        stage ('Push docker image') {
         steps {
           script {
@@ -32,7 +31,7 @@ pipeline {
                         push("${env.BUILD_NUMBER}")
                         push("latest")
                     }
-                }
+             }
         }
       } 
   }
