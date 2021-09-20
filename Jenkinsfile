@@ -22,24 +22,21 @@ pipeline {
           sh 'mvn test'
         }
      }
-      stage ('Build Image') {
-        steps {
-          script {
-                    app = docker.build(DOCKER_IMAGE_NAME)
-              }
-           }
-        }
-      stage('Push Image') {
-        steps {    
-          script {
-     docker.withRegistry('https://registry.hub.docker.com', 'docker_hub_login') {
-                        app.push("${env.BUILD_NUMBER}")
-                        app.push("latest")
-     
+      stage('Docker Build') {
+      agent any
+      steps {
+        sh 'docker build -t avis2good/blessed:latest .'
       }
     }
-  }
-}
+    stage('Docker Push') {
+      agent any
+      steps {
+        withCredentials([usernamePassword(credentialsId: 'docker_hub_login', passwordVariable: 'docker_hub_loginPassword', usernameVariable: 'docker_hub_loginUser')]) {
+          sh "docker login -u ${env.docker_hub_loginUser} -p ${env.docker_hub_loginPassword}"
+          sh 'docker push avis2good/blessed:latest'
+        }
+      }
+    }
        stage('Remove Unused docker image') {
          steps {
         sh "docker rmi $registry:$BUILD_NUMBER"
