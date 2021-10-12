@@ -3,10 +3,6 @@ pipeline {
   tools {
     maven 'M2_HOME'
   }
-  environment {
-    DOCKER_IMAGE_NAME = "avis2good/blessed"
-
-}
   
     stages { 
       stage ('Build') {
@@ -20,11 +16,6 @@ pipeline {
       stage ('test') {
         steps {
           sh 'mvn test'
-          sh 'mvn -Dmaven.test.failure.ignore=true install' 
-            }
-            post {
-                success {
-                    junit 'target/surefire-reports/**/*.xml' 
         }
      }
       stage('Docker Build') {
