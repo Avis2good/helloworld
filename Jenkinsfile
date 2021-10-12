@@ -1,7 +1,7 @@
 pipeline {
   agent any
   tools {
-    maven 'M3'
+    maven 'M2_HOME'
   }
   environment {
     DOCKER_IMAGE_NAME = "avis2good/blessed"
