@@ -10,7 +10,7 @@ pipeline {
           sh 'mvn clean'
           sh 'mvn install'
           sh 'mvn package'
-          archiveArtifacts artifacts: '**/*.war'
+          archiveArtifacts artifacts: '**/*.war', followSymlinks: false
      }
       stage ('test') {
         steps {
