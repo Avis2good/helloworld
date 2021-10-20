@@ -19,7 +19,7 @@ pipeline {
 	}
       agent any
       steps {
-        sh 'docker build -t avis2good/frontend:latest .
+        sh 'docker build -t avis2good/frontend:latest .'
       }
     }
     stage('Docker Push') {
