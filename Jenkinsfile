@@ -11,7 +11,8 @@ pipeline {
           sh 'mvn install'
           sh 'mvn package'
           archiveArtifacts artifacts: '**/*.war', followSymlinks: false
-     }
+	}
+      }
       stage('Docker Build') {
 	when {
 	     branch 'main'
